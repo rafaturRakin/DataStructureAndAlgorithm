@@ -3,9 +3,9 @@
 
 /*
     Author: Rakin
-    Date:  17-01-2022
+    Date:  24-01-2022
     Language: C
-    Content: Array ADT
+    Content: Array elements shifting
 */
 
 struct Array
@@ -43,7 +43,7 @@ void display_array(struct Array arr)
 
 int main()
 {
-    printf("\t***** An Example of Array ADT *****\n\n");
+    printf("\t***** An Example of Array elements shifting *****\n\n");
 
     struct Array arr = {{10, 20, 30, 40, 50}, 20, 5};
 
