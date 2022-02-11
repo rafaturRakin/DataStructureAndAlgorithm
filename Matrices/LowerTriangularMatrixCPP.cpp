@@ -1,4 +1,4 @@
-#include<iostream>
+#include<bits/stdc++.h>
 
 /*
     Author: Rakin
@@ -19,13 +19,13 @@ public:
     LowerTriangularMatrix()
     {
         dimension = 2;
-        A = new int[dimension*(dimension-1)/2];
+        A = new int[(dimension*(dimension+1))/2];
     }
 
     LowerTriangularMatrix(int d)
     {
         dimension = d;
-        A = new int[dimension*(dimension-1)/2];
+        A = new int[(dimension*(dimension+1))/2];
     }
 
     ~LowerTriangularMatrix()
@@ -124,7 +124,6 @@ int main()
         {
             cin >> value;
             m.set_value(i, j, value, isTrue);
-
         }
     }
 
@@ -132,4 +131,3 @@ int main()
 
     return 0;
 }
-
