@@ -19,13 +19,13 @@ public:
     SymmetricMatrix()
     {
         dimension = 2;
-        A = new int[dimension];
+        A = new int[dimension*(dimension+1)/2];
     }
 
     SymmetricMatrix(int d)
     {
         dimension = d;
-        A = new int[dimension];
+        A = new int[dimension*(dimension+1)/2];
     }
 
     ~SymmetricMatrix()
