@@ -1,3 +1,4 @@
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -57,6 +58,30 @@ void display_linkedList(struct Node *p)
 }
 
 
+// Display Linked List using recursion      (05.03.2022)
+void display_linkedList_recursive(struct Node *p)
+{
+    if(p==NULL)
+    {
+        printf("\n");
+        return;
+    }
+    printf("\t%d", p->data);
+    display_linkedList_recursive(p->next);
+}
+
+
+// Display Linked List in reverse order using recursion         (05.03.2022)
+void display_linkedList_reverse_recursive(struct Node *p)
+{
+    if(p==NULL || p->data==-1)
+        return;
+
+    display_linkedList_reverse_recursive(p->next);
+    printf("\t%d", p->data);
+}
+
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -66,7 +91,12 @@ int main()
     printf("Creating Linked List.....\n");
     first = create_linkedList();
 
-    display_linkedList(first);
+    printf("\nDisplaying Linked List : \n");
+    display_linkedList_recursive(first);
+
+    printf("\nPrinting in reverse order :\n");
+    display_linkedList_reverse_recursive(first);
+    printf("\n");
 
     return 0;
 }
