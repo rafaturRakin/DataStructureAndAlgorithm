@@ -82,6 +82,49 @@ void display_linkedList_reverse_recursive(struct Node *p)
 }
 
 
+
+// Iterative counting nodes     (06.03.2022)
+int iterative_countNodes(struct Node * p)
+{
+    int count = 0;
+    while(p)
+    {
+        count++;
+        p = p->next;
+    }
+
+    return count;
+}
+
+// Recursive Counting nodes     (06.03.2022)
+int recursive_countNodes(struct Node* p)
+{
+    if(p==NULL)
+        return 0;
+    return recursive_countNodes(p->next) + 1;
+}
+
+// Iterative sum of nodes       (06.03.2022)
+int iterative_sum(struct Node* p)
+{
+    int sum = 0;
+    while(p)
+    {
+        sum += p->data;
+        p = p->next;
+    }
+    return sum;   // -1 for last node.
+}
+
+// recursive sum of nodes       (06.03.2022)
+int recursive_sum(struct Node* p)
+{
+    if(p==NULL)
+        return 0;
+    return recursive_sum(p->next) + p->data;
+}
+
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -94,9 +137,8 @@ int main()
     printf("\nDisplaying Linked List : \n");
     display_linkedList_recursive(first);
 
-    printf("\nPrinting in reverse order :\n");
-    display_linkedList_reverse_recursive(first);
-    printf("\n");
+    printf("\nPrinting number of nodes in linked list : %d\n", recursive_countNodes(first));
+    printf("\nPrinting sum of nodes in linked list : %d\n", iterative_sum(first));
 
     return 0;
 }
