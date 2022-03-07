@@ -125,6 +125,36 @@ int recursive_sum(struct Node* p)
 }
 
 
+// Maximum element      (07.03.2022)
+int recursive_maxElement(struct Node *p)
+{
+    int maximum = INT_MIN;
+
+    if(p == NULL)
+        return INT_MIN;
+    maximum = recursive_maxElement(p->next);
+    if(maximum > p->data)
+        return maximum;
+    else
+        return p->data;
+
+}
+
+// Minimum Element      (07.03.2022)
+int iterative_minElement(struct Node *p)
+{
+    int minimum = INT_MAX;
+
+    while(p)
+    {
+        if(p->data < minimum && p->data!=-1)
+            minimum = p->data;
+        p = p->next;
+    }
+    return minimum;
+}
+
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -137,8 +167,8 @@ int main()
     printf("\nDisplaying Linked List : \n");
     display_linkedList_recursive(first);
 
-    printf("\nPrinting number of nodes in linked list : %d\n", recursive_countNodes(first));
-    printf("\nPrinting sum of nodes in linked list : %d\n", iterative_sum(first));
+    printf("\nPrinting maximum element in the linked list : %d\n", recursive_maxElement(first));
+    printf("\nPrinting minimum element in the linked list : %d\n", iterative_minElement(first));
 
     return 0;
 }
