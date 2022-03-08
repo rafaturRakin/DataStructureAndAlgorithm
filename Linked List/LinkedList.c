@@ -1,4 +1,3 @@
-
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -155,6 +154,50 @@ int iterative_minElement(struct Node *p)
 }
 
 
+// Linear Search        (08.03.2022)
+void linear_search(struct Node *p, int key)
+{
+    int count = 0;
+    while(p)
+    {
+        ++count;
+        if(p->data == key)
+        {
+            printf("\t%d is found at node #%d\n", p->data, count);
+            return;
+        }
+        p = p->next;
+    }
+
+    printf("\t%d is not found in the list\n", key);
+}
+
+
+// Improved Linear Search       (08.03.2022)
+struct Node * improved_linear_search(struct Node *first_node, int key)
+{
+    int count = 0;
+    struct Node *current_node = first_node, *previous_node=NULL;
+
+    while(current_node)
+    {
+        ++count;
+        if(current_node->data == key)
+        {
+            printf("\t%d is found at node #%d\n", current_node->data, count);
+            previous_node->next = current_node->next;
+            current_node->next = first_node;
+            first_node = current_node;
+            printf("\tfirst node is now = %d\n\n", first_node->data);
+            return first_node;
+        }
+        previous_node = current_node;
+        current_node = current_node->next;
+    }
+    printf("\t%d is not found in the list\n", key);
+    return first_node;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -165,10 +208,18 @@ int main()
     first = create_linkedList();
 
     printf("\nDisplaying Linked List : \n");
-    display_linkedList_recursive(first);
+    display_linkedList(first);
 
-    printf("\nPrinting maximum element in the linked list : %d\n", recursive_maxElement(first));
-    printf("\nPrinting minimum element in the linked list : %d\n", iterative_minElement(first));
+    printf("\nSearching in linked list\n");
+    linear_search(first, 12);
+    linear_search(first, 57);
+
+    printf("\nImproved Searching in linked list\n");
+    first = improved_linear_search(first, 12);
+    first = improved_linear_search(first, 57);
+
+    printf("\nAfter Improvement...\n");
+    display_linkedList(first);
 
     return 0;
 }
