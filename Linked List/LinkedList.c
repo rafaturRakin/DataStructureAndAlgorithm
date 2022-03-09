@@ -14,6 +14,8 @@ struct Node
     struct Node* next;
 };
 
+int iterative_countNodes(struct Node *);
+
 
 // creating linked list     (04.03.22)
 struct Node * create_linkedList()
@@ -47,8 +49,8 @@ struct Node * create_linkedList()
 // displaying linked list       (04.03.22)
 void display_linkedList(struct Node *p)
 {
-    printf("\nDisplaying the linked list : \n");
-    while(p != NULL && p->data!=-1)
+    printf("Displaying the linked list with %d nodes : \n", iterative_countNodes(p));
+    while(p != NULL)
     {
         printf("\t%d", p->data);
         p = p->next;
@@ -198,6 +200,32 @@ struct Node * improved_linear_search(struct Node *first_node, int key)
     return first_node;
 }
 
+
+// Inserting in Linked List         (09.03.2022)
+struct Node * insert_linkedList(struct Node *first_node, int index, int value)
+{
+    struct Node *new_node, *current_node;
+    current_node = first_node;
+    new_node = (struct Node *) malloc(sizeof(struct Node));
+    new_node->data = value;
+
+    if(index<0 || index>iterative_countNodes(first_node))
+        printf("\tInvalid Index!!!%d is not inserted at index #%d\n", value, index);
+    else if(index==0)
+    {
+        new_node->next = first_node;
+        first_node = new_node;
+    }
+    else
+    {
+        for(int i=0; i<index-1; i++)
+            current_node = current_node->next;
+        new_node->next = current_node->next;
+        current_node->next = new_node;
+    }
+    return first_node;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -207,18 +235,26 @@ int main()
     printf("Creating Linked List.....\n");
     first = create_linkedList();
 
-    printf("\nDisplaying Linked List : \n");
+    printf("\n");
     display_linkedList(first);
 
-    printf("\nSearching in linked list\n");
-    linear_search(first, 12);
-    linear_search(first, 57);
 
-    printf("\nImproved Searching in linked list\n");
-    first = improved_linear_search(first, 12);
-    first = improved_linear_search(first, 57);
+    printf("\nInserting in linked list...\n");
 
-    printf("\nAfter Improvement...\n");
+    printf("\nInserting 5 at 0\n");
+    first = insert_linkedList(first, 0, 5);
+    display_linkedList(first);
+
+    printf("\nInserting 100 at -1\n");
+    first = insert_linkedList(first, -1, 100);
+    display_linkedList(first);
+
+    printf("\nInserting 500 at 4\n");
+    first = insert_linkedList(first, 4, 500);
+    display_linkedList(first);
+
+    printf("\nInserting 1000 at 2\n");
+    first = insert_linkedList(first, 2, 1000);
     display_linkedList(first);
 
     return 0;
