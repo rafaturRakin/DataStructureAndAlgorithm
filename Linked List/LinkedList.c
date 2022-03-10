@@ -226,36 +226,59 @@ struct Node * insert_linkedList(struct Node *first_node, int index, int value)
     return first_node;
 }
 
+
+// Insert in a Sorted Linked List       (10.03.2022)
+struct Node * insert_sorted(struct Node * first_node, int value)
+{
+    struct Node *current_node, *new_node, *previous_node=NULL;
+
+    new_node = (struct Node *) malloc(sizeof(struct Node));
+    new_node->data = value;
+    new_node->next = NULL;
+
+    current_node = first_node;
+
+    if(first_node == NULL)
+        first_node = new_node;
+    else if(value <= first_node->data)
+    {
+        new_node->next = first_node;
+        first_node = new_node;
+    }
+    else
+    {
+        while(current_node && current_node->data<value)
+        {
+            previous_node = current_node;
+            current_node = current_node->next;
+        }
+
+        new_node->next = previous_node->next;
+        previous_node->next = new_node;
+    }
+
+    return first_node;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
 
-    struct Node * first;
+    struct Node * first=NULL;
 
     printf("Creating Linked List.....\n");
-    first = create_linkedList();
+    first = insert_sorted(first, 10);
+    first = insert_sorted(first, 20);
+    first = insert_sorted(first, 5);
+    first = insert_sorted(first, 15);
 
     printf("\n");
     display_linkedList(first);
 
-
-    printf("\nInserting in linked list...\n");
-
-    printf("\nInserting 5 at 0\n");
-    first = insert_linkedList(first, 0, 5);
+    printf("Inserting in sorted linked list...\n");
+    first = insert_sorted(first, 10);
     display_linkedList(first);
 
-    printf("\nInserting 100 at -1\n");
-    first = insert_linkedList(first, -1, 100);
-    display_linkedList(first);
-
-    printf("\nInserting 500 at 4\n");
-    first = insert_linkedList(first, 4, 500);
-    display_linkedList(first);
-
-    printf("\nInserting 1000 at 2\n");
-    first = insert_linkedList(first, 2, 1000);
-    display_linkedList(first);
 
     return 0;
 }
