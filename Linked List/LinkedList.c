@@ -260,25 +260,58 @@ struct Node * insert_sorted(struct Node * first_node, int value)
     return first_node;
 }
 
+
+// Delete from linked list
+struct Node * delete_node(struct Node * first_node, int index)
+{
+    struct Node *current_node = first_node, *previous_node=NULL;
+
+    if(index<1 || index>iterative_countNodes(first_node))
+        printf("\tInvalid Index (%d)!!!\n", index);
+    else if(index == 1)
+    {
+        printf("\tDeleted element is %d\n", current_node->data);
+        first_node = first_node->next;
+        free(current_node);
+    }
+    else
+    {
+        for(int i=0; i<index-1; i++)
+        {
+            previous_node = current_node;
+            current_node = current_node->next;
+        }
+        previous_node->next = current_node->next;
+        printf("\tDeleted element is %d\n", current_node->data);
+        free(current_node);
+    }
+
+    return first_node;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
 
-    struct Node * first=NULL;
+    struct Node *first, *second;
 
     printf("Creating Linked List.....\n");
-    first = insert_sorted(first, 10);
-    first = insert_sorted(first, 20);
-    first = insert_sorted(first, 5);
-    first = insert_sorted(first, 15);
+    first = create_linkedList();
 
-    printf("\n");
+    printf("\n", first);
     display_linkedList(first);
 
-    printf("Inserting in sorted linked list...\n");
-    first = insert_sorted(first, 10);
+    printf("\nDelete from Linked List (NULL header)...\n");
+    second = delete_node(NULL, 1);
+    second = delete_node(NULL, 0);
+
+    printf("\nDeleted first node...\n");
+    first = delete_node(first, 1);
     display_linkedList(first);
 
+    printf("\nDeleted 3rd node...\n");
+    first = delete_node(first, 3);
+    display_linkedList(first);
 
     return 0;
 }
