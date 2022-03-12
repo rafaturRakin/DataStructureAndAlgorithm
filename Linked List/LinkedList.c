@@ -26,15 +26,20 @@ struct Node * create_linkedList()
     first = (struct Node *) malloc(sizeof(struct Node));
     printf("Enter the value (-1 to stop) : ");
     scanf("%d", &value);
+    if(value==-1)
+        return NULL;
+
     first->data = value;
     first->next = NULL;
-
     last_node = first;
 
-    while(value != -1)
+    while(1)
     {
         printf("Enter the value (-1 to stop) : ");
         scanf("%d", &value);
+
+        if(value==-1)
+            break;
 
         current_node = (struct Node *) malloc(sizeof(struct Node));
         current_node->data = value;
@@ -75,7 +80,7 @@ void display_linkedList_recursive(struct Node *p)
 // Display Linked List in reverse order using recursion         (05.03.2022)
 void display_linkedList_reverse_recursive(struct Node *p)
 {
-    if(p==NULL || p->data==-1)
+    if(p==NULL)
         return;
 
     display_linkedList_reverse_recursive(p->next);
@@ -148,7 +153,7 @@ int iterative_minElement(struct Node *p)
 
     while(p)
     {
-        if(p->data < minimum && p->data!=-1)
+        if(p->data < minimum)
             minimum = p->data;
         p = p->next;
     }
@@ -289,6 +294,30 @@ struct Node * delete_node(struct Node * first_node, int index)
     return first_node;
 }
 
+
+// Checking sorted or not       (12.03.2022)
+void isSorted(struct Node * current_node)
+{
+    int previous_value = INT_MIN;
+    if(current_node==NULL)
+    {
+        printf("\tList is empty!!!\n");
+        return;
+    }
+
+    while(current_node != NULL)
+    {
+        if(current_node->data < previous_value)
+        {
+            printf("\tList is not sorted\n");
+            return;
+        }
+        previous_value = current_node->data;
+        current_node = current_node->next;
+    }
+    printf("\tList is sorted\n");
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -297,21 +326,10 @@ int main()
 
     printf("Creating Linked List.....\n");
     first = create_linkedList();
-
-    printf("\n", first);
     display_linkedList(first);
 
-    printf("\nDelete from Linked List (NULL header)...\n");
-    second = delete_node(NULL, 1);
-    second = delete_node(NULL, 0);
-
-    printf("\nDeleted first node...\n");
-    first = delete_node(first, 1);
-    display_linkedList(first);
-
-    printf("\nDeleted 3rd node...\n");
-    first = delete_node(first, 3);
-    display_linkedList(first);
+    printf("List 1 : \n");
+    isSorted(first);
 
     return 0;
 }
