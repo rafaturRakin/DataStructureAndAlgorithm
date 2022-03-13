@@ -318,6 +318,36 @@ void isSorted(struct Node * current_node)
     printf("\tList is sorted\n");
 }
 
+
+// Remove duplicate nodes       (13.03.2022)
+struct Node * remove_duplicate(struct Node * first_node)
+{
+    struct Node *current_node, *next_node;
+
+    if(first_node==NULL)
+        return NULL;
+
+    current_node = first_node;
+    next_node = first_node->next;
+
+    while(next_node != NULL)
+    {
+        if(current_node->data != next_node->data)
+        {
+            current_node = next_node;
+            next_node = next_node->next;
+        }
+        else
+        {
+            current_node->next = next_node->next;
+            printf("\tDeleted Element : %d\n", next_node->data);
+            free(next_node);
+            next_node = current_node->next;
+        }
+    }
+    return first_node;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -326,10 +356,13 @@ int main()
 
     printf("Creating Linked List.....\n");
     first = create_linkedList();
+
+    printf("\n");
     display_linkedList(first);
 
-    printf("List 1 : \n");
-    isSorted(first);
+    printf("\nAfter Removing duplicate nodes...\n");
+    first = remove_duplicate(first);
+    display_linkedList(first);
 
     return 0;
 }
