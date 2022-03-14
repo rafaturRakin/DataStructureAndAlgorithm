@@ -12,7 +12,7 @@ struct Node
 {
     int data;
     struct Node* next;
-};
+} *globalNode;
 
 int iterative_countNodes(struct Node *);
 
@@ -348,6 +348,65 @@ struct Node * remove_duplicate(struct Node * first_node)
     return first_node;
 }
 
+
+// reverse linked list (data)       (14.03.2022)
+void reverse_data(struct Node *first_node)
+{
+    int i=0, *arr;
+    struct Node *current_node = first_node;
+
+    arr = (int *) malloc(sizeof(int) * iterative_countNodes(first_node));
+
+    while(current_node)
+    {
+        arr[i++] = current_node->data;
+        current_node = current_node->next;
+    }
+
+    current_node = first_node;
+    i--;
+
+    while(current_node)
+    {
+        current_node->data = arr[i--];
+        current_node = current_node->next;
+    }
+    free(arr);
+}
+
+
+// reverse linked list (links)      (14.03.2022)
+struct Node * reverse_slidingPointer(struct Node * first_node)
+{
+    struct Node *p, *q, *r;
+    p = first_node;
+    q = r = NULL;
+
+    while(p)
+    {
+        r = q;
+        q = p;
+        p = p->next;
+        q->next = r;
+    }
+
+    first_node = q;
+    return first_node;
+}
+
+
+// reverse linked list (recursive)      (14.03.2022)
+void reverse_recursive(struct Node *previous, struct Node *current)
+{
+    if(current)
+    {
+        reverse_recursive(current, current->next);
+        current->next = previous;
+    }
+    else
+        globalNode = previous;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -360,9 +419,18 @@ int main()
     printf("\n");
     display_linkedList(first);
 
-    printf("\nAfter Removing duplicate nodes...\n");
-    first = remove_duplicate(first);
+    printf("\nAfter Reversing data...\n");
+    reverse_data(first);
     display_linkedList(first);
+
+    printf("\nAfter Reversing links...\n");
+    first = reverse_slidingPointer(first);
+    display_linkedList(first);
+
+    globalNode = first;
+    printf("\nAfter Reversing recursively...\n");
+    reverse_recursive(NULL, globalNode);
+    display_linkedList(globalNode);
 
     return 0;
 }
