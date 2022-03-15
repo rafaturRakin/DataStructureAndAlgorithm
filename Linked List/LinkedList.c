@@ -407,30 +407,98 @@ void reverse_recursive(struct Node *previous, struct Node *current)
         globalNode = previous;
 }
 
+
+// Concatenating 2 linked list      (15.03.2022)
+struct Node * concatenate_list(struct Node *first_node, struct Node *second_node)
+{
+    struct Node * third_node = first_node;
+    while(first_node->next)
+        first_node = first_node->next;
+    first_node->next = second_node;
+    return third_node;
+}
+
+
+// Merging 2 linked list        (15.03.2022)
+struct Node * merge_list(struct Node *first_node, struct Node *second_node)
+{
+    struct Node *current_first, *current_last;
+
+    if(first_node->data < second_node->data)
+    {
+        current_first = current_last = first_node;
+        first_node = first_node->next;
+        current_first->next = NULL;
+    }
+    else
+    {
+        current_first = current_last = second_node;
+        second_node = second_node->next;
+        current_first->next = NULL;
+    }
+
+    while(first_node!=NULL && second_node!=NULL)
+    {
+        if(first_node->data < second_node->data)
+        {
+            current_last->next = first_node;
+            current_last = first_node;
+            first_node = first_node->next;
+            current_last->next = NULL;
+        }
+        else
+        {
+            current_last->next = second_node;
+            current_last = second_node;
+            second_node = second_node->next;
+            current_last->next = NULL;
+        }
+    }
+
+    if(first_node)
+        current_last->next = first_node;
+    if(second_node)
+        current_last->next = second_node;
+
+    return current_first;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
 
-    struct Node *first, *second;
+    struct Node *first, *second, *new_list;
 
-    printf("Creating Linked List.....\n");
+    printf("Creating 1st Linked List.....\n");
     first = create_linkedList();
-
     printf("\n");
     display_linkedList(first);
+    printf("\n\n");
 
-    printf("\nAfter Reversing data...\n");
-    reverse_data(first);
-    display_linkedList(first);
 
-    printf("\nAfter Reversing links...\n");
-    first = reverse_slidingPointer(first);
-    display_linkedList(first);
+    printf("Creating 2nd Linked List.....\n");
+    second = create_linkedList();
+    printf("\n");
+    display_linkedList(second);
+    printf("\n\n");
 
-    globalNode = first;
-    printf("\nAfter Reversing recursively...\n");
-    reverse_recursive(NULL, globalNode);
-    display_linkedList(globalNode);
+
+    printf("Merging 2 linked list....\n");
+    new_list = merge_list(first, second);
+    display_linkedList(new_list);
+    printf("\n");
+
+
+    printf("Creating 3rd Linked List.....\n");
+    second = create_linkedList();
+    printf("\n");
+    display_linkedList(second);
+    printf("\n\n");
+
+    printf("Concatenating 2 linked list....\n");
+    new_list = concatenate_list(new_list, second);
+    display_linkedList(new_list);
+    printf("\n\n");
 
     return 0;
 }
