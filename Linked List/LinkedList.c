@@ -463,11 +463,31 @@ struct Node * merge_list(struct Node *first_node, struct Node *second_node)
     return current_first;
 }
 
+
+// Has Loop in Linked list      (16.03.2022)
+void has_loop(struct Node * first_node)
+{
+    struct Node *first, *second;
+    first = second = first_node;
+
+    do
+    {
+        first = first->next;
+        second = second->next;
+        second = second ? second->next : second;
+    } while(first && second && first!=second);
+
+    if(first==second)
+        printf("\tList has a loop\n");
+    else
+        printf("\tList is linear\n");
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
 
-    struct Node *first, *second, *new_list;
+    struct Node *first, *second, *temp_node, *current_node;
 
     printf("Creating 1st Linked List.....\n");
     first = create_linkedList();
@@ -483,22 +503,19 @@ int main()
     printf("\n\n");
 
 
-    printf("Merging 2 linked list....\n");
-    new_list = merge_list(first, second);
-    display_linkedList(new_list);
-    printf("\n");
+    // creating loop
+    printf("Creating loop in second list...\n");
+    current_node = second;
+    temp_node = second->next->next;
+    while(current_node->next)
+        current_node = current_node->next;
+    current_node->next = temp_node;
 
+    printf("Checking 1st list has a loop or not\n");
+    has_loop(first);
 
-    printf("Creating 3rd Linked List.....\n");
-    second = create_linkedList();
-    printf("\n");
-    display_linkedList(second);
-    printf("\n\n");
-
-    printf("Concatenating 2 linked list....\n");
-    new_list = concatenate_list(new_list, second);
-    display_linkedList(new_list);
-    printf("\n\n");
+    printf("Checking 2nd list has a loop or not\n");
+    has_loop(second);
 
     return 0;
 }
