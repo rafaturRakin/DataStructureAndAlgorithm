@@ -48,13 +48,25 @@ void display_linkedList(struct Node *p)
 }
 
 
+// recursive display
+void recursive_display(struct Node *h,int flag)
+{
+    if(h!=head || flag==0)
+    {
+        flag = 1;
+        printf("\t %d", h->data);
+        recursive_display(h->next, flag);
+    }
+}
+
 int main()
 {
     printf("\t***** An Example of Circular Linked List in C *****\n\n");
 
     int arr[7] = {1, 2, 4, 8, 16, 32, 64};
     create_linkedList(arr, 7);
-    display_linkedList(head);
+    printf("Displaying recursively...\n");
+    recursive_display(head, 0);
     return 0;
 }
 
