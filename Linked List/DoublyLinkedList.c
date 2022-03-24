@@ -51,6 +51,44 @@ int countNodes(struct Node * p)
 }
 
 
+void insert_node(int index, int value)
+{
+    struct Node *current_node, *temp_node;
+
+    if(index<0 || index>countNodes(first))
+    {
+        printf("\tInvalid Index!!!%d is not inserted.\n", value);
+        return;
+    }
+
+    if(index==0)
+    {
+        temp_node = (struct Node *) malloc(sizeof(struct Node));
+        temp_node->data = value;
+        temp_node->previous = NULL;
+        temp_node->next = first;
+        first->previous = temp_node;
+        first = temp_node;
+        printf("\t%d is inserted before %d and it's the current first node\n", value, first->next->data);
+    }
+    else
+    {
+        current_node = first;
+        for(int i=0; i<index-1; i++)
+            current_node = current_node->next;
+        temp_node = (struct Node *) malloc(sizeof(struct Node));
+        temp_node->data = value;
+
+        temp_node->previous = current_node;
+        temp_node->next = current_node->next;
+        if(current_node->next)
+            current_node->next->previous = temp_node;
+        current_node->next = temp_node;
+        printf("\t%d is inserted after %d\n", value, current_node->data);
+    }
+}
+
+
 void display_linkedList(struct Node *p)
 {
     printf("Displaying the linked list with %d nodes : \n", countNodes(p));
@@ -72,6 +110,16 @@ int main()
     printf("Creating Linked List...\n");
     create_linkedList(arr, 7);
 
+    display_linkedList(first);
+
+    printf("\n");
+    insert_node(-1, 10);
+    insert_node(0, 10);
+    insert_node(1, 20);
+    insert_node(5, 50);
+    insert_node(10, 100);
+
+    printf("\n");
     display_linkedList(first);
 
     return 0;
