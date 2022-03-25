@@ -89,6 +89,38 @@ void insert_node(int index, int value)
 }
 
 
+void delete_node(struct Node *p, int index)
+{
+    struct Node *current_node = p;
+    if(index<1 || index>countNodes(p))
+    {
+        printf("\t%d is an invalid index!!!\n", index);
+        return;
+    }
+
+    if(index==1)
+    {
+        current_node = first;
+        first = first->next;
+        if(first)
+            first->previous = NULL;
+        printf("\t%d is deleted. Current first node is %d\n", current_node->data, first->data);
+        free(current_node);
+    }
+    else
+    {
+        for(int i=0; i<index-1; i++)
+            p = p->next;
+        current_node = p;
+        current_node->previous->next = current_node->next;
+        if(current_node->next)
+            current_node->next->previous = current_node->previous;
+        printf("\t%d is delete\n", current_node->data);
+        free(current_node);
+    }
+}
+
+
 void display_linkedList(struct Node *p)
 {
     printf("Displaying the linked list with %d nodes : \n", countNodes(p));
@@ -113,11 +145,10 @@ int main()
     display_linkedList(first);
 
     printf("\n");
-    insert_node(-1, 10);
-    insert_node(0, 10);
-    insert_node(1, 20);
-    insert_node(5, 50);
-    insert_node(10, 100);
+    delete_node(first, -1);
+    delete_node(first, 1);
+    delete_node(first, 6);
+    delete_node(first, 3);
 
     printf("\n");
     display_linkedList(first);
