@@ -121,6 +121,20 @@ void delete_node(struct Node *p, int index)
 }
 
 
+void reverse_list(struct Node *p)
+{
+    struct Node *current_node;
+    while(p != NULL)
+    {
+        current_node = p->next;
+        p->next = p->previous;
+        p->previous = current_node;
+        p = p->previous;
+        if(p!=NULL && p->next==NULL)
+            first = p;
+    }
+}
+
 void display_linkedList(struct Node *p)
 {
     printf("Displaying the linked list with %d nodes : \n", countNodes(p));
@@ -143,16 +157,12 @@ int main()
     create_linkedList(arr, 7);
 
     display_linkedList(first);
-
     printf("\n");
-    delete_node(first, -1);
-    delete_node(first, 1);
-    delete_node(first, 6);
-    delete_node(first, 3);
 
-    printf("\n");
+    reverse_list(first);
+
+    printf("After reversing...\n");
     display_linkedList(first);
 
     return 0;
 }
-
