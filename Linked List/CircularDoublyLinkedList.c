@@ -28,10 +28,11 @@ void createLinkedList(int arr[], int len)
     {
         current_node = (struct Node *) malloc(sizeof(struct Node));
         current_node->data = arr[i];
-        last->next = current_node;
         current_node->previous = last;
+        current_node->next = last->next;
+        last->next = current_node;
+        current_node->next->previous = current_node;
         last = current_node;
-        last->next = head;
     }
 }
 
@@ -47,6 +48,72 @@ int countNodes(struct Node *h)
     } while(h!=head);
     return counter;
 }
+
+
+void insertNode(struct Node *h, int index, int value)
+{
+    if(index<0 || index>countNodes(h))
+    {
+        printf("\tInvalid Index!!!%d is not inserted\n", value);
+        return;
+    }
+
+    struct Node *newNode, *currentNode;
+    if(index==0)
+    {
+        newNode = (struct Node *) malloc(sizeof(struct Node));
+        newNode->data = value;
+        newNode->previous = head->previous;
+        newNode->next = head;
+        newNode->previous->next = newNode;
+        head->previous = newNode;
+        head = newNode;
+        printf("\t%d is inserted at head\n", value);
+    }
+    else
+    {
+        currentNode = head;
+        for(int i=0; i<index-1; i++)
+            currentNode = currentNode->next;
+        newNode = (struct Node *) malloc(sizeof(struct Node));
+        newNode->data = value;
+        newNode->next = currentNode->next;
+        newNode->previous = currentNode;
+        currentNode->next->previous = newNode;
+        currentNode->next = newNode;
+        printf("\t%d is inserted\n", value);
+    }
+}
+
+void deleteNode(struct Node *h, int index)
+{
+    if(index<1 || index>countNodes(h))
+    {
+        printf("Invalid Index!!! Index must be in between [1, %d]\n", countNodes(h));
+        return;
+    }
+
+    struct Node *currentNode = h;
+    if(index==1)
+    {
+        currentNode = currentNode->next;
+        currentNode->previous = h->previous;
+        h->previous->next = currentNode;
+        head = currentNode;
+        printf("\t%d is deleted from the head of the list\n", h->data);
+        free(h);
+    }
+    else
+    {
+        for(int i=0; i<index-1; i++)
+            currentNode = currentNode->next;
+        currentNode->previous->next = currentNode->next;
+        currentNode->next->previous = currentNode->previous;
+        printf("\t%d is delete from the list\n", currentNode->data);
+        free(currentNode);
+    }
+}
+
 
 void displayList(struct Node *h)
 {
@@ -71,6 +138,7 @@ int main()
     int fixed_array[] = {0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
     struct Node *temp = NULL;
     createLinkedList(fixed_array, 6);
+    deleteNode(head, 1);
     displayList(head);
     return 0;
 }
