@@ -483,6 +483,23 @@ void has_loop(struct Node * first_node)
         printf("\tList is linear\n");
 }
 
+
+int middleNode(struct Node *first_node)
+{
+    struct  Node *middle, *secondPointer;
+    middle = secondPointer = first_node;
+    while(secondPointer)
+    {
+        secondPointer = secondPointer->next;
+        if(secondPointer)
+            secondPointer = secondPointer->next;
+        if(secondPointer)
+            middle = middle->next;
+    }
+    printf("\tMiddle node is %d\n", middle->data);
+    return middle->data;
+}
+
 int main()
 {
     printf("\t***** An Example of Linked List in C *****\n\n");
@@ -516,6 +533,8 @@ int main()
 
     printf("Checking 2nd list has a loop or not\n");
     has_loop(second);
+
+    printf("Middle node of first list is : %d\n", middleNode(first));
 
     return 0;
 }
