@@ -59,6 +59,27 @@ void insertNode(int data)
     }
 }
 
+
+struct Node * insertNodeRecursive(struct Node *node, int data)
+{
+    struct Node *newNode;
+    if(node == NULL)
+    {
+        newNode = (struct Node *) malloc(sizeof(struct Node));
+        newNode->data = data;
+        newNode->leftChild = NULL;
+        newNode->rightChild = NULL;
+        return newNode;
+    }
+
+    if(node->data > data)
+        node->leftChild = insertNodeRecursive(node->leftChild, data);
+    else if(node->data < data)
+        node->rightChild = insertNodeRecursive(node->rightChild, data);
+
+    return newNode;
+}
+
 void inorderTraversal(struct Node *node)
 {
     if(node)
@@ -84,21 +105,34 @@ struct Node * searchNode(int key)
     return NULL;
 }
 
+struct Node * searchNodeRecursive(struct Node *node, int key)
+{
+    if(node==NULL)
+        return NULL;
+    if(node->data == key)
+        return node;
+    else if(node->data < key)
+        return searchNodeRecursive(node->rightChild, key);
+    else
+        return searchNodeRecursive(node->leftChild, key);
+}
+
 int main()
 {
     printf("\t***** An Example of Binary Search Tree in c *****\n\n");
-    insertNode(10);
-    insertNode(10);
-    insertNode(20);
-    insertNode(5);
-    insertNode(7);
-    insertNode(27);
+    struct Node *current = NULL;
+    current = insertNodeRecursive(current, 3);
+    current = insertNodeRecursive(current, 20);
+    insertNodeRecursive(current, 15);
+    insertNodeRecursive(current, 7);
+    insertNodeRecursive(current, 27);
+    insertNodeRecursive(current, 2);
 
-    inorderTraversal(root);
+    inorderTraversal(current);
     printf("\n");
 
     int data = 5;
-    struct Node *node = searchNode(data);
+    struct Node *node = searchNodeRecursive(current, data);
     if(node)
         printf("%d Found\n", data);
     else
