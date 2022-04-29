@@ -77,7 +77,7 @@ struct Node * insertNodeRecursive(struct Node *node, int data)
     else if(node->data < data)
         node->rightChild = insertNodeRecursive(node->rightChild, data);
 
-    return newNode;
+    return node;
 }
 
 void inorderTraversal(struct Node *node)
@@ -117,26 +117,93 @@ struct Node * searchNodeRecursive(struct Node *node, int key)
         return searchNodeRecursive(node->leftChild, key);
 }
 
+int treeHeight(struct Node *node)
+{
+    int left, right;
+    if(node==NULL)
+        return 0;
+    left = treeHeight(node->leftChild);
+    right = treeHeight(node->rightChild);
+    if(left>=right)
+        return left + 1;
+    else
+        return right + 1;
+}
+
+struct Node * inorderPredessor(struct Node *node)
+{
+    while(node && node->rightChild)
+        node = node->rightChild;
+    return node;
+}
+
+struct Node * inorderSuccessor(struct Node *node)
+{
+    while(node && node->leftChild)
+        node = node->leftChild;
+    return  node;
+}
+
+struct Node * deleteNode(struct Node *node, int key)
+{
+    struct Node *newNode;
+
+    if(node==NULL)
+        return NULL;
+    if(node->leftChild==NULL && node->rightChild==NULL)
+    {
+        if(node==root)
+            root = NULL;
+        free(node);
+        return NULL;
+    }
+
+    if(key < node->data)
+        node->leftChild = deleteNode(node->leftChild, key);
+    else if(key > node->data)
+        node->rightChild = deleteNode(node->rightChild, key);
+    else
+    {
+        if(treeHeight(node->leftChild) >= treeHeight(node->rightChild))
+        {
+            newNode = inorderPredessor(node->leftChild);
+            node->data = newNode->data;
+            node->leftChild = deleteNode(node->leftChild, newNode->data);
+        }
+        else
+        {
+            newNode = inorderSuccessor(node->rightChild);
+            node->data = newNode->data;
+            node->rightChild = deleteNode(node->rightChild, newNode->data);
+        }
+    }
+    return node;
+}
+
 int main()
 {
     printf("\t***** An Example of Binary Search Tree in c *****\n\n");
     struct Node *current = NULL;
-    current = insertNodeRecursive(current, 3);
-    current = insertNodeRecursive(current, 20);
-    insertNodeRecursive(current, 15);
-    insertNodeRecursive(current, 7);
-    insertNodeRecursive(current, 27);
-    insertNodeRecursive(current, 2);
+    current = insertNodeRecursive(current, 30);
+    insertNodeRecursive(current, 20);
+    insertNodeRecursive(current, 40);
+    insertNodeRecursive(current, 10);
+    insertNodeRecursive(current, 25);
+    insertNodeRecursive(current, 35);
+    insertNodeRecursive(current, 45);
+    insertNodeRecursive(current, 42);
+    insertNodeRecursive(current, 43);
 
     inorderTraversal(current);
     printf("\n");
 
-    int data = 5;
-    struct Node *node = searchNodeRecursive(current, data);
-    if(node)
-        printf("%d Found\n", data);
-    else
-        printf("%d Not found\n", data);
+    printf("Before delete root is : %d\n", current->data);
+
+    current = deleteNode(current, 30);
+
+    printf("After delete root is : %d\n", current->data);
+    inorderTraversal(current);
+    printf("\n");
 
     return 0;
 }
