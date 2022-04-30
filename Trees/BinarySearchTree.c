@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "Stack.h"
 
 /*
     Author: Rakin
@@ -8,12 +9,7 @@
     Content: Binary Search Tree
 */
 
-struct Node
-{
-    struct Node *leftChild;
-    int data;
-    struct Node *rightChild;
-} *root = NULL;
+struct Node *root = NULL;
 
 void insertNode(int data)
 {
@@ -180,30 +176,63 @@ struct Node * deleteNode(struct Node *node, int key)
     return node;
 }
 
+void createFromPreorder(int elements[], int length)
+{
+    struct Stack st;
+    createStack(&st, 100);
+    struct Node *current, *newNode;
+    int i = 0;
+
+    root = (struct Node *) malloc(sizeof(struct Node));
+    root->leftChild = NULL;
+    root->data = elements[i++];
+    root->rightChild = NULL;
+    current = root;
+
+    while(i<length)
+    {
+        if(elements[i]<current->data)
+        {
+            newNode = (struct Node *) malloc(sizeof(struct Node));
+            newNode->data = elements[i++];
+            newNode->leftChild = NULL;
+            newNode->rightChild = NULL;
+            current->leftChild = newNode;
+            pushElement(&st, current);
+            current = newNode;
+        }
+        else
+        {
+            int data;
+            if(stackTopPointer(st)==NULL)
+                data = INT_MAX;
+            else
+                data = stackTopPointer(st)->data;
+            if(elements[i]>current->data && elements[i]<data)
+            {
+                newNode = (struct Node *) malloc(sizeof(struct Node));
+                newNode->data = elements[i++];
+                newNode->leftChild = NULL;
+                newNode->rightChild = NULL;
+                current->rightChild = newNode;
+                current = newNode;
+            }
+            else
+                current = popElement(&st);
+        }
+    }
+}
+
 int main()
 {
     printf("\t***** An Example of Binary Search Tree in c *****\n\n");
-    struct Node *current = NULL;
-    current = insertNodeRecursive(current, 30);
-    insertNodeRecursive(current, 20);
-    insertNodeRecursive(current, 40);
-    insertNodeRecursive(current, 10);
-    insertNodeRecursive(current, 25);
-    insertNodeRecursive(current, 35);
-    insertNodeRecursive(current, 45);
-    insertNodeRecursive(current, 42);
-    insertNodeRecursive(current, 43);
+    int preorder [] = {30, 20, 10, 15, 25, 40, 50, 45};
 
-    inorderTraversal(current);
+    createFromPreorder(preorder, 8);
+
+    inorderTraversal(root);
     printf("\n");
 
-    printf("Before delete root is : %d\n", current->data);
-
-    current = deleteNode(current, 30);
-
-    printf("After delete root is : %d\n", current->data);
-    inorderTraversal(current);
-    printf("\n");
 
     return 0;
 }
