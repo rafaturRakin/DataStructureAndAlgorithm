@@ -52,6 +52,27 @@ struct Node * LLRotation(struct Node * node)
     return nodeLeftChild;
 }
 
+struct Node * LRRotation(struct Node *node)
+{
+    struct Node *nodeLeftChild, *nodeLeftChildRightChild;
+    nodeLeftChild = node->leftChild;
+    nodeLeftChildRightChild = nodeLeftChild->rightChild;
+
+    nodeLeftChild->rightChild = nodeLeftChildRightChild->leftChild;
+    node->leftChild = nodeLeftChildRightChild->rightChild;
+
+    nodeLeftChildRightChild->leftChild = nodeLeftChild;
+    nodeLeftChildRightChild->rightChild = node;
+
+    nodeLeftChild->height = nodeHeight(nodeLeftChild);
+    node->height = nodeHeight(node);
+    nodeLeftChildRightChild->height = nodeHeight(nodeLeftChildRightChild);
+
+    if(ROOT == node)
+        ROOT = nodeLeftChildRightChild;
+    return nodeLeftChildRightChild;
+}
+
 
 struct Node * recursiveInsert(struct Node * node, int data)
 {
@@ -76,8 +97,8 @@ struct Node * recursiveInsert(struct Node * node, int data)
 
     if(balanceFactor(node)==2 && balanceFactor(node->leftChild)==1)
         return LLRotation(node);
-    //else if(balanceFactor(node)==2 && balanceFactor(node->leftChild)==-1)
-        //return LRRotaion(node);
+    else if(balanceFactor(node)==2 && balanceFactor(node->leftChild)==-1)
+        return LRRotation(node);
     /*
     else if(balanceFactor(node)==-2 && balanceFactor(node->leftChild)==-1)
         return RRRotation(node);
@@ -94,10 +115,10 @@ struct Node * recursiveInsert(struct Node * node, int data)
 int main()
 {
     printf("\t***** An Example of AVL Tree in c *****\n\n");
-    ROOT = recursiveInsert(ROOT, 10);
+    ROOT = recursiveInsert(ROOT, 50);
     printf("After first Value : %d\n", ROOT->data);
-    recursiveInsert(ROOT, 5);
-    recursiveInsert(ROOT, 2);
+    recursiveInsert(ROOT, 10);
+    recursiveInsert(ROOT, 20);
 
     printf("Current Root : %d\n", ROOT->data);
     return 0;
